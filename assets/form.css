@@ -1,0 +1,42 @@
+#card-header{
+  background-color: #be9e21;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.card{
+  border: 3px solid #be9e21 !important;
+  border-radius: 10px !important;
+}
+
+#btn-submit{
+  border: 3px solid #be9e21;
+  background-color: #fff;
+  color: #be9e21;
+  font-weight: bold;
+  font-size: 20px;
+  padding: 10px;
+  margin-top: 20px;
+}
+
+#btn-submit:hover{
+  background-color: #be9e21;
+  color: #fff;
+}
+
+input{
+  border: 1px solid #be9e21 !important;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.preview-image {
+  align-self: center;
+  max-width: 100px;
+  max-height: 300px;
+}
