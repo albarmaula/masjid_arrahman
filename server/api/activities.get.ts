@@ -5,11 +5,11 @@ export default defineEventHandler(async (event) => {
   try {
     // Query to get all activities sorted by date in descending order
     const [activities] = await pool.query('SELECT id, date, agenda FROM activities ORDER BY date DESC');
-    console.log('Activities:', activities);
+    // console.log('Activities:', activities);
 
     // Query to get all flyers
     const [flyers] = await pool.query('SELECT activity_id, img FROM activities_flyers');
-    console.log('Flyers:', flyers);
+    // console.log('Flyers:', flyers);
 
     // Map flyers to their respective activities
     const activitiesWithFlyers = activities.map((activity: any) => {
@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
       };
     });
 
-    console.log('Activities with Flyers:', activitiesWithFlyers);
+    // console.log('Activities with Flyers:', activitiesWithFlyers);
 
     return {
       statusCode: 200,

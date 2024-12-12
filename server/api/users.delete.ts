@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
     if (!id) {
       return {
         statusCode: 400,
-        message: 'ID activity is required',
+        message: 'ID user is required',
       };
     }
 

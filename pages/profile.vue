@@ -5,13 +5,7 @@ definePageMeta({
 </script>
 
 <template>
-  <!-- KEGIATAN -->
-  <div class="section" id="kegiatan">
-      <div class="profil-bg-color">
-        <section class="section-padding wow fadeIn delay-05s">
-          <Profile />
-        </section>
-      </div>
-    </div>
-    <!-- KEGIATAN -->
+  <div>
+    <Profile />
+  </div>
 </template>

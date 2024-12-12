@@ -1,11 +1,11 @@
 <script setup>
 definePageMeta({
-  title: "Kegiatan Masjid Oasis Ar-Rahman",
+  title: "Galeri Masjid Oasis Ar-Rahman",
 });
 </script>
 
 <template>
   <div>
-      <Activities />
+    <Gallery />
   </div>
 </template>

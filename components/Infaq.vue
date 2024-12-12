@@ -1,19 +1,17 @@
 <template>
   <div>
     <br />
-    <div class="container text-white text-center">
+    <div class="container text-center">
       <div class="row">
         <h2 class="title pad-bt15">Infaq Masjid</h2>
         <div class="col-md-6 col-sm-12 col-xs-12">
           <div class="wrap-item">
-            <div class="infaq-img">
-              <img class="item-img" src="../static/qris.png" />
-            </div>
+            <img class="infaq-img" src="../static/qris.png" />
           </div>
         </div>
         <div class="col-md-6 col-sm-12 col-xs-12">
           <br />
-          <div class="wrap-item">
+          <div class="wrap-item mt-5">
             <p class="sub-title">
               Setiap rezeki yang kita miliki adalah titipan dari Allah.
               Sebagaimana Allah berjanji dalam Al-Qur'an:
@@ -32,7 +30,7 @@
               setiap langkah kebaikan.
             </p>
             <p class="sub-title">Jazakumullahu khairan.</p>
-            <hr class="white-bottom-line" />
+            <hr class="bottom-line" />
           </div>
         </div>
       </div>

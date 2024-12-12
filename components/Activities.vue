@@ -44,7 +44,7 @@
                 :class="{ active: activeTab === 1 }"
                 @click="setActiveTab(1)"
               >
-                Agenda
+                AGENDA
               </button>
             </li>
             <li class="nav-tabs-item">
@@ -53,7 +53,7 @@
                 :class="{ active: activeTab === 2 }"
                 @click="setActiveTab(2)"
               >
-                Flyer
+                FLYER
               </button>
             </li>
           </ul>
@@ -69,7 +69,7 @@
                   <img
                     v-if="activity.agenda"
                     :src="'data:image/jpeg;base64,' + activity.agenda"
-                    class="d-block w-100 rounded border shadow-sm"
+                    class="act-img img-fluid"
                     alt="Agenda Image"
                   />
                 </div>
@@ -81,26 +81,28 @@
               <div
                 v-for="flyer in paginatedFlyers"
                 :key="flyer.id"
-                class="carousel-inner position-relative"
+                class="carousel-inner"
               >
                 <img
                   :src="'data:image/jpeg;base64,' + flyer.img"
-                  class="img-fluid rounded border shadow-sm"
+                  class="act-img img-fluid"
                   :alt="flyer.description || 'Flyer Image'"
                 />
                 <!-- Pagination Controls Inside Image -->
                 <button
+                  v-if="currentPage > 1"
                   class="btn position-absolute start-0 top-50 translate-middle-y"
+                  style="margin-left: 1rem;"
                   id="btn-rounded"
-                  :disabled="currentPage === 1"
                   @click="previousPage"
                 >
                   &lt;
                 </button>
                 <button
+                  v-if="currentPage < totalPages"
                   class="btn position-absolute end-0 top-50 translate-middle-y"
+                  style="margin-right: 1rem;"
                   id="btn-rounded"
-                  :disabled="currentPage === totalPages"
                   @click="nextPage"
                 >
                   &gt;

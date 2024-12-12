@@ -7,9 +7,9 @@
         <nav class="navbar navbar-expand-lg navbar-default fixed-top">
           <div class="container navbar-header">
             <a href="#">
-              <img src="/static/logoRBG.png" class="img-responsive logo" />
+              <img src="/static/logoRBG.png" class="img-responsive nav-logo" />
             </a>
-            <a class="navbar-brand" href="/" style="margin-left: 10px">
+            <a class="navbar-brand" href="#" style="margin-left: 10px">
               Masjid Oasis Ar-Rahman
             </a>
             <button
@@ -25,8 +25,13 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
               <ul class="navbar-nav ms-auto">
-                <li class="nav-item ">
-                  <a class="nav-link " href="/#profile">
+                <li class="nav-item">
+                  <a class="nav-link" href="/">
+                    <i class="bi bi-house-fill"></i> Beranda
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/#profile">
                     <i class="bi bi-person"></i> Profil
                   </a>
                 </li>
@@ -43,11 +48,6 @@
                 <li class="nav-item">
                   <a class="nav-link" href="/#gallery">
                     <i class="bi bi-image"></i> Galeri
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="/#article">
-                    <i class="bi bi-newspaper"></i> Artikel
                   </a>
                 </li>
               </ul>
@@ -68,48 +68,40 @@
           <div class="container text-center">
             <div class="row">
               <!-- About Section -->
-              <div class="col-md-4 col-sm-4 col-xs-12">
-                <div class="wrap-item">
-                  <h5>Tentang Kami</h5>
-                  <p>
-                    Masjid Oasis Ar-Rahman merupakan pusat kegiatan keagamaan dan
-                    sosial di Surabaya, berkomitmen mempererat ukhuwah dan
-                    meningkatkan nilai-nilai spiritual.
+              <div class="col-md-8 col-sm-8 col-xs-12">
+                <div class="wrap-item" style="text-align: justify;">
+                  <img
+                    src="/static/logoRBG.png"
+                    alt="Masjid Oasis Ar-Rahman"
+                    class="footer-logo"
+                    style="min-width: 8rem;"
+                  />
+                  <h3 style="font-weight: 600;">
+                    MASJID OASIS AR-RAHMAN SURABAYA
+                  </h3>
+                  <p style="margin-bottom: 0px;">
+                    Jl. Jepara 10 No. 7, Kel. Jepara, Kec. Bubutan, Surabaya, Jawa Timur, 60171 <br/>
+                    Telp. 082140442025
                   </p>
-                </div>
-              </div>
-
-              <!-- Contact Section -->
-              <div class="col-md-4 col-sm-4 col-xs-12">
-                <div class="wrap-item text-center">
-                  <h5>Kontak</h5>
-                  <ul class="list-unstyled">
-                    <li>
-                      <a
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        href="https://www.google.com/maps/place/Masjid+AR-RAHMAN+Surabaya/@-7.238764,112.7237963,15z/data=!4m6!3m5!1s0x2dd7f900571a4799:0x50aa6e7d825282fc!8m2!3d-7.238764!4d112.7237963!16s%2Fg%2F11wm_tk2pp?entry=ttu&g_ep=EgoyMDI0MTExMy4xIKXMDSoASAFQAw%3D%3D"
-                        ><i class="bi bi-map"></i> Jl. Jepara X No. 7,
-                        Surabaya</a
-                      >
-                    </li>
-                    <li><i class="bi bi-phone"></i> (031) 123-4567</li>
-                    <li>
-                      <i class="bi bi-envelope"></i> masjidarrahmansby@gmail.com
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              <!-- Social Media & Links -->
-              <div class="col-md-4 col-sm-4 col-xs-12">
-                <div class="wrap-item">
-                  <h5>Ikuti Kami</h5>
-                  <div class="social-icons">
+                  <div class="social-icons" style="margin-top: 0px;">
                     <a
                       target="_blank"
                       rel="noopener noreferrer"
-                      href="https://www.facebook.com/profile.php?id=61568578465750&rdid=SDMozGi5C26DynFH&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F14zZnaSBse%2F"
+                      href="https://wa.me/6282140442025"
+                      class="me-3"
+                      ><i class="bi bi-whatsapp"></i
+                    ></a>
+                    <a
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href="masjid-oasis-arrahman.com"
+                      class="me-3"
+                      ><i class="bi bi-globe2"></i
+                    ></a>
+                    <a
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href="https://www.facebook.com/people/Masjid-Oasis-Ar-Rahman/61570329506995/"
                       class="me-3"
                       ><i class="bi bi-facebook"></i
                     ></a>
@@ -131,8 +123,28 @@
                       target="_blank"
                       rel="noopener noreferrer"
                       href="https://www.youtube.com/@Masjid-Oasis-Ar-Rahman"
+                      class="me-3"
                       ><i class="bi bi-youtube"></i
                     ></a>
+                    
+                  </div>
+                </div>
+              </div>
+
+              <!-- Map Section -->
+              <div class="col-md-4 col-sm-4 col-xs-12">
+                <div class="wrap-item">
+                  <div class="embed-responsive embed-responsive-16by9">
+                    <iframe
+                      class="embed-responsive-item"
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3958.614694254846!2d112.72160717468048!3d-7.238763992781228!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7f900571a4799%3A0x50aa6e7d825282fc!2sMasjid%20AR-RAHMAN%20Surabaya!5e0!3m2!1sen!2sid!4v1691234567890!5m2!1sen!2sid"
+                      width="100%"
+                      height="300"
+                      style="border: 0"
+                      allowfullscreen=""
+                      loading="lazy"
+                      referrerpolicy="no-referrer-when-downgrade"
+                    ></iframe>
                   </div>
                 </div>
               </div>
@@ -141,8 +153,7 @@
         </div>
         <div class="footer-bottom text-center py-2 text-white">
           <small
-            >&copy; 2024 Masjid Oasis Ar-Rahman. All rights
-            reserved.</small
+            >&copy; 2024 Masjid Oasis Ar-Rahman. All rights reserved.</small
           >
         </div>
       </footer>

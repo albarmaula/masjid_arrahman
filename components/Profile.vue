@@ -8,13 +8,13 @@
           <br />
           <div class="wrap-item">
             <div class="profile-img">
-              <img class="item-img" src="../static/logoRBG.png" />
+              <img class="logo-img" src="../static/logoRBG.png" />
             </div>
           </div>
         </div>
         <div class="col-md-6 col-sm-12 col-xs-12">
           <div class="wrap-item">
-            <p class="sub-title pad-bt15">
+            <p class="sub-title mt-5">
               Masjid Oasis Ar-Rahman merupakan pusat kegiatan keagamaan dan
               sosial yang berada di Jl. Jepara X No. 7, Surabaya, yang
               berkomitmen untuk memperkuat nilai-nilai spiritual serta
@@ -26,7 +26,7 @@
               menjadi pusat ibadah sekaligus pusat kegiatan sosial yang
               melibatkan seluruh lapisan masyarakat.
             </p>
-            <hr class="yellow-bottom-line" />
+            <hr class="bottom-line" />
           </div>
         </div>
       </div>
