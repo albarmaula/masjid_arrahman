@@ -1,27 +1,28 @@
 <template>
-  <div>
-    <br />
-    <div class="container">
-      <div class="card shadow-sm">
-        <div class="card-header" id="card-header">
-          <h3 class="title mb-0">Tambah User</h3>
-        </div>
-        <div class="card-body">
-          <form @submit.prevent="addUser">
-            <div class="mb-3">
-              <label for="email" class="form-label">Email</label>
-              <input v-model="email" type="email" class="form-control" id="email"/>
-            </div>
-            <div class="mb-3">
-              <label for="password" class="form-label">Password</label>
-              <input v-model="password" type="password" class="form-control" id="password"/>
-            </div>
-            <button type="submit" class="btn w-100" id="btn-submit">
-              Tambah
-            </button>
-          </form>
-        </div>
+  <div class="container">
+    <form @submit.prevent="addUser">
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input v-model="email" type="email" class="form-control" id="email" placeholder="user@email.com"/>
       </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input
+          v-model="password"
+          type="password"
+          class="form-control"
+          id="password"
+        />
+      </div>
+      <button type="submit" class="btn w-100 mb-3" id="btn-submit">Tambah</button>
+    </form>
+    <div v-if="messageError" class="notification-error">
+      <i class="bi bi-x-circle-fill"></i>
+      {{ messageError }}
+    </div>
+    <div v-if="messageSuccess" class="notification">
+      <i class="bi bi-check-circle-fill"></i>
+      {{ messageSuccess }}
     </div>
   </div>
 </template>
@@ -33,6 +34,13 @@ import bcrypt from "bcryptjs";
 const password = ref("");
 const email = ref("");
 const message = ref("");
+const messageError = ref('')
+const messageSuccess = ref('')
+
+const resetForm = () => {
+  email.value = ''
+  password.value = ''
+}
 
 const addUser = async () => {
   try {
@@ -48,13 +56,14 @@ const addUser = async () => {
     });
 
     if (response.error.value) {
-      message.value = "Failed to add user";
+      messageError.value = 'Terjadi kesalahan saat menambah data'
     } else {
-      message.value = "User added successfully";
+      messageSuccess.value = 'Tambah data berhasil! Mohon refresh halaman'
+      resetForm()
     }
   } catch (error) {
-    console.error("Error adding user:", error);
-    message.value = "An error occurred";
+    messageError.value = 'Terjadi kesalahan saat menambah data'
+    console.error('Error:', error)
   }
 };
 </script>

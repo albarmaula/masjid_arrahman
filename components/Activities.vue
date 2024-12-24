@@ -1,117 +1,119 @@
 <template>
-  <div>
-    <br />
-    <div class="container">
-      <h2 class="title pad-bt15">Kegiatan Masjid</h2>
-      <div class="row justify-content-center">
-        <div class="wrap-item text-center col-lg-9 col-md-10">
-          <!-- Month and Year Selector -->
-          <div class="mb-3 d-flex justify-content-center align-items-center">
-            <div class="col-md-4 col-sm-4 col-xs-12">
-              <button
-                v-if="!isFirstMonth"
-                @click="previousMonth"
-                id="btn-rounded"
-                class="btn"
-              >
-                &lt;
-              </button>
-            </div>
-            <div class="col-md-4 col-sm-4 col-xs-12">
-              <h3 class="mx-3">
-                {{ months[selectedMonth] }} {{ selectedYear }}
-              </h3>
-            </div>
-            <div class="col-md-4 col-sm-4 col-xs-12">
-              <button
-                v-if="!isLastMonth"
-                @click="nextMonth"
-                id="btn-rounded"
-                class="btn"
-              >
-                &gt;
-              </button>
-            </div>
-          </div>
-          <!-- Tab Panel -->
-          <ul
-            class="nav nav-tabs justify-content-center mb-3"
-            id="kegiatanTabs"
+  <div class="container">
+    <h2 class="title pad-bt15">Kegiatan Masjid</h2>
+    <div class="row justify-content-center">
+      <div class="wrap-item text-center col-lg-9 col-md-10">
+        <!-- Month and Year Selector -->
+        <div class="mb-3 month-selector">
+          <button
+            v-if="!isFirstMonth"
+            @click="previousMonth"
+            class="nav-btn-page"
+            :class="{ disabled: isFirstMonth }"
           >
-            <li class="nav-tabs-item">
-              <button
-                class="nav-tabs-link"
-                :class="{ active: activeTab === 1 }"
-                @click="setActiveTab(1)"
-              >
-                AGENDA
-              </button>
-            </li>
-            <li class="nav-tabs-item">
-              <button
-                class="nav-tabs-link"
-                :class="{ active: activeTab === 2 }"
-                @click="setActiveTab(2)"
-              >
-                FLYER
-              </button>
-            </li>
-          </ul>
-          <!-- Tab Content -->
-          <div v-if="activeTab === 1">
-            <div>
-              <div class="carousel-inner">
-                <div
-                  v-for="(activity, index) in currentMonthActivities"
-                  :key="activity.id"
-                  :class="['carousel-item', { active: index === 0 }]"
-                >
-                  <img
-                    v-if="activity.agenda"
-                    :src="'data:image/jpeg;base64,' + activity.agenda"
-                    class="act-img img-fluid"
-                    alt="Agenda Image"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div v-if="activeTab === 2">
-            <div class="row">
-              <div
-                v-for="flyer in paginatedFlyers"
-                :key="flyer.id"
-                class="carousel-inner"
-              >
-                <img
-                  :src="'data:image/jpeg;base64,' + flyer.img"
-                  class="act-img img-fluid"
-                  :alt="flyer.description || 'Flyer Image'"
-                />
-                <!-- Pagination Controls Inside Image -->
-                <button
-                  v-if="currentPage > 1"
-                  class="btn position-absolute start-0 top-50 translate-middle-y"
-                  style="margin-left: 1rem;"
-                  id="btn-rounded"
-                  @click="previousPage"
-                >
-                  &lt;
-                </button>
-                <button
-                  v-if="currentPage < totalPages"
-                  class="btn position-absolute end-0 top-50 translate-middle-y"
-                  style="margin-right: 1rem;"
-                  id="btn-rounded"
-                  @click="nextPage"
-                >
-                  &gt;
-                </button>
-              </div>
+            <i class="bi bi-chevron-left"></i>
+          </button>
+          <h3 class="month-title">
+            {{ months[selectedMonth] }} {{ selectedYear }}
+          </h3>
+          <button
+            v-if="!isLastMonth"
+            @click="nextMonth"
+            class="nav-btn-page"
+            :class="{ disabled: isLastMonth }"
+          >
+            <i class="bi bi-chevron-right"></i>
+          </button>
+        </div>
+
+        <!-- Tab Panel -->
+        <ul class="nav nav-tabs justify-content-center mb-3" id="kegiatanTabs">
+          <li class="nav-tabs-item">
+            <button
+              class="nav-tabs-link"
+              :class="{ active: activeTab === 1 }"
+              @click="setActiveTab(1)"
+            >
+              AGENDA
+            </button>
+          </li>
+          <li class="nav-tabs-item">
+            <button
+              class="nav-tabs-link"
+              :class="{ active: activeTab === 2 }"
+              @click="setActiveTab(2)"
+            >
+              FLYER
+            </button>
+          </li>
+        </ul>
+
+        <!-- Loading State -->
+      <div v-if="isLoading" class="loading-spinner">
+        <div class="spinner"></div>
+      </div>
+        <!-- Tab Content -->
+        <div v-if="activeTab === 1" class="image-container">
+          <div class="carousel-inner position-relative">
+            <div
+              v-for="(activity, index) in currentMonthActivities"
+              :key="activity.id"
+              :class="['carousel-item', { active: index === 0 }]"
+              @click="openModal(activity.agenda)"
+            >
+              <img
+                v-if="activity.agenda"
+                :src="'data:image/jpeg;base64,' + activity.agenda"
+                class="act-img img-fluid"
+                alt="Agenda Image"
+              />
             </div>
           </div>
         </div>
+
+        <div v-if="activeTab === 2" class="image-container">
+          <div class="carousel-inner position-relative">
+            <div
+              v-for="flyer in paginatedFlyers"
+              :key="flyer.id"
+              @click="openModal(flyer.img)"
+            >
+              <img
+                :src="'data:image/jpeg;base64,' + flyer.img"
+                class="act-img img-fluid"
+                :alt="flyer.description || 'Flyer Image'"
+              />
+            </div>
+            <button
+              v-if="currentPage > 1"
+              class="nav-btn prev"
+              :class="{ disabled: currentPage === 1 }"
+              @click.stop="previousPage"
+            >
+              <i class="bi bi-chevron-left"></i>
+            </button>
+            <button
+              v-if="currentPage < totalPages"
+              class="nav-btn next"
+              :class="{ disabled: currentPage === totalPages }"
+              @click.stop="nextPage"
+            >
+              <i class="bi bi-chevron-right"></i>
+            </button>
+          </div>
+        </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Image Modal -->
+  <div v-if="showModal" class="modal-background" @click.self="closeModal">
+    <button class="close-button" @click="closeModal">&times;</button>
+    <div class="modal-container">
+      <img
+        :src="'data:image/jpeg;base64,' + selectedImage"
+        class="modal-image"
+      />
     </div>
   </div>
 </template>
@@ -161,6 +163,8 @@ const setActiveTab = (tab) => {
   activeTab.value = tab;
 };
 
+const isLoading = ref(true);
+
 const fetchActivities = async () => {
   try {
     const response = await axios.get("/api/activities");
@@ -169,6 +173,8 @@ const fetchActivities = async () => {
   } catch (err) {
     error.value = "An error occurred while fetching activities";
     console.error("Error fetching activities:", err);
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -181,11 +187,10 @@ const filterActivities = () => {
     );
   });
 
-  // Extract all flyers for the current month activities
   allFlyers.value = currentMonthActivities.value.flatMap(
     (activity) => activity.flyers
   );
-  currentPage.value = 1; // Reset to first page when activities are filtered
+  currentPage.value = 1;
 };
 
 const previousMonth = () => {
@@ -235,4 +240,17 @@ const nextPage = () => {
 };
 
 onMounted(fetchActivities);
+
+const showModal = ref(false);
+const selectedImage = ref(null);
+
+const openModal = (image) => {
+  selectedImage.value = image;
+  showModal.value = true;
+};
+
+const closeModal = () => {
+  showModal.value = false;
+  selectedImage.value = null;
+};
 </script>

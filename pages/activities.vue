@@ -5,7 +5,7 @@ definePageMeta({
 </script>
 
 <template>
-  <div>
-      <Activities />
+  <div class="pages" id="activities">
+    <Activities />
   </div>
 </template>

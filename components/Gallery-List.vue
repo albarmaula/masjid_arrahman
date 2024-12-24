@@ -8,16 +8,30 @@
       <thead class="thead-light">
         <tr>
           <th>ID</th>
-          <th>Email</th>
+          <th>Tanggal</th>
+          <th>Caption</th>
+          <th>Images</th>
           <th>Aksi</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="user in users" :key="user.id">
-          <td>{{ user.id }}</td>
-          <td>{{ user.email }}</td>
+        <tr v-for="gallery in galleries" :key="gallery.id">
+          <td>{{ gallery.id }}</td>
+          <td>{{ formatDate(gallery.date) }}</td>
+          <td>{{ gallery.caption }}</td>
           <td>
-            <button class="btn btn-danger" @click="showDeleteModal(user.id)">
+            <div class="gallery-images">
+              <img
+                v-for="(image, index) in gallery.images"
+                :key="index"
+                :src="'data:image/jpeg;base64,' + image"
+                alt="Gallery Image"
+                class="table-image"
+              />
+            </div>
+          </td>
+          <td>
+            <button class="btn btn-danger" @click="showDeleteModal(gallery.id)">
               <i class="bi bi-trash"></i>
             </button>
           </td>
@@ -34,7 +48,7 @@
       {{ messageSuccess }}
     </div>
 
-    <div class="modal fade" id="deleteUserModal" tabindex="-1">
+    <div class="modal fade" id="deleteGalleryModal" tabindex="-1">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -46,7 +60,7 @@
             ></button>
           </div>
           <div class="modal-body">
-            Apakah anda yakin ingin menghapus pengguna ini?
+            Apakah anda yakin ingin menghapus galeri ini?
           </div>
           <div class="modal-footer">
             <button
@@ -57,9 +71,9 @@
               Batal
             </button>
             <button
+              @click="confirmDelete"
               type="button"
               class="btn btn-danger"
-              @click="confirmDelete"
               data-bs-dismiss="modal"
             >
               Hapus
@@ -76,23 +90,28 @@ import { defineComponent, ref, onMounted } from "vue";
 import { useNuxtApp } from "#app";
 
 export default defineComponent({
-  name: "UsersList",
+  name: "GalleryList",
   setup() {
     const { $bootstrap } = useNuxtApp();
-    const users = ref([]);
+    const galleries = ref([]);
     const isLoading = ref(true);
     const messageError = ref("");
     const messageSuccess = ref("");
     const selectedId = ref(null);
     const modal = ref(null);
 
-    const fetchUsers = async () => {
+    const fetchGalleries = async () => {
       isLoading.value = true;
       try {
-        const response = await $fetch("/api/users");
-        users.value = response;
+        const response = await $fetch("/api/gallery");
+        if (response.statusCode === 200) {
+          galleries.value = response.data;
+        } else {
+          console.error("Failed to fetch galleries:", response.message);
+          messageError.value = "Gagal memuat data galeri!";
+        }
       } catch (error) {
-        console.error("Error fetching users:", error);
+        console.error("Error fetching galleries:", error);
         messageError.value = "Gagal memuat data pengguna!";
       } finally {
         isLoading.value = false;
@@ -101,44 +120,53 @@ export default defineComponent({
 
     onMounted(() => {
       modal.value = new $bootstrap.Modal(
-        document.getElementById("deleteUserModal")
+        document.getElementById("deleteGalleryModal")
       );
-      fetchUsers();
+      fetchGalleries();
     });
 
-    const showDeleteModal = (user_id) => {
-      selectedId.value = user_id;
+    const showDeleteModal = (gallery_id) => {
+      selectedId.value = gallery_id;
       modal.value.show();
     };
 
     const confirmDelete = async () => {
       try {
-        await $fetch("/api/users", {
+        const response = await $fetch("/api/gallery", {
           method: "DELETE",
           body: { id: selectedId.value },
         });
-        messageSuccess.value = "Pengguna berhasil dihapus!";
-        setTimeout(() => {
-          messageSuccess.value = "";
-        }, 3000);
-        modal.value.hide();
-        await fetchUsers();
+
+        if (response.statusCode === 200) {
+          messageSuccess.value = "Galeri berhasil dihapus!";
+          setTimeout(() => {
+            messageSuccess.value = "";
+          }, 3000);
+          await fetchGalleries();
+        }
       } catch (error) {
-        messageError.value = "Gagal menghapus pengguna!";
+        messageError.value = "Gagal menghapus galeri!";
         setTimeout(() => {
           messageError.value = "";
         }, 3000);
-        console.error("Error deleting user:", error);
+        console.error("Error deleting gallery:", error);
       }
     };
 
+    const formatDate = (dateString: string) => {
+      const date = new Date(dateString);
+      const options = { year: "numeric", month: "long", day: "numeric" };
+      return date.toLocaleDateString("id-ID", options);
+    };
+
     return {
-      users,
-      isLoading,
-      messageError,
-      messageSuccess,
+      galleries,
       showDeleteModal,
       confirmDelete,
+      formatDate,
+      messageError,
+      messageSuccess,
+      isLoading,
     };
   },
 });

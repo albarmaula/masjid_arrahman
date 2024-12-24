@@ -1,51 +1,52 @@
 <template>
-  <div>
-    <br />
-    <div class="container text-center">
+    <div class="container">
       <h2 class="title pad-bt15">Galeri Masjid</h2>
-      <div class="row g-4">
+      <!-- Loading State -->
+      <div v-if="isLoading" class="loading-spinner">
+        <div class="spinner"></div>
+      </div>
+      <!-- Gallery Grid -->
+      <div v-else class="gallery-grid">
         <div
-          class="col-md-4 col-sm-6 col-xs-12 galeri-item"
           v-for="(item, index) in paginatedItems"
           :key="index"
+          class="gallery-item"
         >
-          <figure>
-            <img :src="item.imgUrl" alt="Kegiatan Masjid" class="gal-img" />
-            <figcaption>
-              <h2>{{ item.caption }}</h2>
-              <p>{{ item.date }}</p>
+          <div class="gallery-card">
+            <img :src="item.imgUrl" :alt="item.caption" class="gallery-image" />
+            <div class="gallery-overlay">
+              <h3 class="gallery-caption">{{ item.caption }}</h3>
+              <p class="gallery-date">{{ item.date }}</p>
               <button
-                class="btn galeri-btn"
+                class="gallery-btn"
                 @click="viewPhoto(item.id, item.caption)"
               >
                 Lihat Foto
               </button>
-            </figcaption>
-          </figure>
+            </div>
+          </div>
         </div>
       </div>
-      <br />
-      <div class="pagination-controls mr-btn-15">
+
+      <!-- Pagination -->
+      <div class="gallery-pagination">
         <NuxtLink
           v-if="currentPage > 1"
           :to="`/gallery/page/${currentPage - 1}`"
-          class="btn"
-          id="btn-rounded"
+          class="nav-btn-page"
         >
-          &lt;
+        <i class="bi bi-chevron-left"></i>
         </NuxtLink>
-        <span class="mx-3" style="font-size: 20px; font-weight: 700;">{{ currentPage }}</span>
+        <span class="pagination-current">{{ currentPage }}</span>
         <NuxtLink
           v-if="currentPage * itemsPerPage < galleryItems.length"
           :to="`/gallery/page/${currentPage + 1}`"
-          class="btn"
-          id="btn-rounded"
+          class="nav-btn-page"
         >
-          &gt;
+        <i class="bi bi-chevron-right"></i>
         </NuxtLink>
       </div>
     </div>
-  </div>
 </template>
 
 <script setup>
@@ -64,14 +65,17 @@ const paginatedItems = computed(() => {
   return galleryItems.value.slice(start, end);
 });
 
+const isLoading = ref(true);
+
 const fetchGalleryItems = async () => {
   try {
+    isLoading.value = true;
     const response = await fetch("/api/gallery");
     const result = await response.json();
 
     if (result.statusCode === 200 && Array.isArray(result.data)) {
       galleryItems.value = result.data.map(item => ({
-        id: item.id, // Use actual ID from API response
+        id: item.id,
         imgUrl: `data:image/jpeg;base64,${item.images[0]}`,
         caption: item.caption,
         date: formatDate(item.date),
@@ -81,6 +85,8 @@ const fetchGalleryItems = async () => {
     }
   } catch (error) {
     console.error("Error fetching gallery items:", error);
+  } finally {
+    isLoading.value = false;
   }
 };
 

@@ -1,9 +1,3 @@
-<template>
-  <div>
-      <Gallery />
-  </div>
-</template>
-
 <script setup>
 definePageMeta({
   title: "Gallery",
@@ -12,3 +6,9 @@ definePageMeta({
   },
 });
 </script>
+
+<template>
+  <div class="pages">
+      <Gallery />
+  </div>
+</template>

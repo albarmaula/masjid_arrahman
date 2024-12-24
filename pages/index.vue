@@ -7,15 +7,7 @@
             <div class="row">
               <div class="banner-info text-center wow fadeIn delay-05s">
                 <h1 class="bnr-title">Selamat datang di Website</h1>
-                <h2 class="bnr-sub-title">
-                  Masjid Oasis Ar-Rahman Jepara Surabaya
-                </h2>
-                <p class="bnr-para">
-                  Masjid Oasis Ar-Rahman merupakan pusat kegiatan keagamaan dan
-                  sosial yang terletak di Jl. Jepara X No. 7, Surabaya, yang
-                  berkomitmen untuk memperkuat nilai-nilai spiritual serta
-                  mempererat silaturahmi antarumat.
-                </p>
+                <h2 class="bnr-sub-title">Masjid Oasis Ar-Rahman Surabaya</h2>
                 <div class="overlay-detail">
                   <a href="#profile">
                     <i class="bi bi-chevron-down"></i>
@@ -27,13 +19,7 @@
         </div>
       </div>
     </div>
-    <!-- FITUR -->
-    <div class="section">
-      <section id="features" class="section-padding wow fadeIn delay-05s">
-        <Features />
-      </section>
-    </div>
-    <!-- FITUR -->
+
     <!-- PROFIL -->
     <div class="section" id="profile">
       <section class="section-padding wow fadeIn delay-05s">
@@ -44,6 +30,13 @@
       </section>
     </div>
     <!-- PROFIL -->
+    <!-- FITUR -->
+    <div class="section">
+      <section id="features" class="section-padding wow fadeIn delay-05s">
+        <Features />
+      </section>
+    </div>
+    <!-- FITUR -->
     <!-- KEGIATAN -->
     <div class="section" id="activities">
       <section class="section-padding wow fadeIn delay-05s">
@@ -54,6 +47,13 @@
       </section>
     </div>
     <!-- KEGIATAN -->
+    <!-- YOUTUBE -->
+    <div class="section" id="youtube">
+      <section class="section-padding wow fadeIn delay-05s">
+        <Youtube />
+      </section>
+    </div>
+    <!-- YOUTUBE -->
     <!-- INFAQ -->
     <div class="section" id="infaq">
       <section class="section-padding wow fadeIn delay-05s">

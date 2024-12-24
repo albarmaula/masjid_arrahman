@@ -37,13 +37,18 @@ export default defineNuxtConfig({
 
   css: [
     'assets/main.css',
+    'assets/admin.css',
     'assets/base.css',
     'assets/animate.css',
-    'assets/form.css',
-    'assets/table.css',
     'bootstrap/dist/css/bootstrap.min.css',
     '@fortawesome/fontawesome-free/css/all.min.css',
   ],
+
+  ssr: true,
+
+  // modules: [ 
+  //   'cookie-universal-nuxt',
+  // ],
 
   plugins: [
     { src: "~/plugins/bootstrap.client.ts", mode: "client" },
