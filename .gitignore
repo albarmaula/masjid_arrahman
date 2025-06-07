@@ -17,10 +17,8 @@ logs
 .DS_Store
 .fleet
 .idea
-.output
-.nuxt
 
 # Local env files
-.env
-.env.*
-!.env.example
+# .env
+# .env.*
+# !.env.example
