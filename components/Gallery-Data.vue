@@ -7,22 +7,24 @@
           <img
             v-for="(image, index) in paginatedImages"
             :key="index"
-            :src="'data:image/jpeg;base64,' + image"
+            :src="image"
             alt="Gallery Image"
             class="gallery-image-modal"
           />
           <!-- Navigation buttons -->
           <button
-            v-if="currentPage > 1"
             class="nav-btn prev"
             @click="previousPage"
+            :class="{ 'disabled': currentPage === 1 }"
+            :disabled="currentPage === 1"
           >
             <i class="bi bi-chevron-left"></i>
           </button>
           <button
-            v-if="currentPage < totalPages"
             class="nav-btn next"
             @click="nextPage"
+            :class="{ 'disabled': currentPage === totalPages }"
+            :disabled="currentPage === totalPages"
           >
             <i class="bi bi-chevron-right"></i>
           </button>
@@ -58,11 +60,13 @@ export default defineComponent({
   name: "GalleryDetail",
   setup() {
     const route = useRoute();
-    const gallery = ref<null | {
+    interface GalleryData {
       caption: string;
       date: string;
       images: string[];
-    }>(null);
+    }
+
+    const gallery = ref<null | GalleryData>(null);
     const error = ref<string | null>(null);
 
     const currentPage = ref(1);

@@ -1,9 +1,12 @@
 import { defineEventHandler, readMultipartFormData } from 'h3';
-import pool from '../db';  // MySQL pool
+import { writeFile } from 'fs/promises';
+import { join } from 'path';
+import pool from '../db';
 
 export default defineEventHandler(async (event) => {
     try {
         const formData = await readMultipartFormData(event);
+        const uploadDir = '/home/masj2582/public_html/uploads/gallery';
 
         const caption = formData.find(field => field.name === 'caption')?.data.toString();
         const date = formData.find(field => field.name === 'date')?.data.toString();
@@ -13,22 +16,26 @@ export default defineEventHandler(async (event) => {
             return { statusCode: 400, message: 'Caption, at least one image, and date are required' };
         }
 
-        // Log received data
-        console.log('Received date:', date);
-        console.log('Received caption:', caption);
-        console.log('Received flyer files:', galleryFiles);
-
+        // Insert gallery data
         const [galleryResult] = await pool.execute(
             'INSERT INTO gallery (caption, date) VALUES (?, ?)',
             [caption, date]
         );
         const galleryId = (galleryResult as any).insertId;
 
-        // Insert multiple images
-        const galleryImgInsertPromises = galleryFiles.map((galleryFile) => {
+        // Save gallery images
+        const galleryImgInsertPromises = galleryFiles.map(async (galleryFile, index) => {
+            // Create unique filename
+            const fileName = `gallery_${galleryId}_${index}_${Date.now()}_${galleryFile.filename}`;
+            const filePath = join(uploadDir, fileName);
+
+            // Save file to disk
+            await writeFile(filePath, galleryFile.data);
+
+            // Store file path in database
             return pool.execute(
                 'INSERT INTO gallery_img (gallery_id, img) VALUES (?, ?)',
-                [galleryId, galleryFile.data]  // Store image as BLOB
+                [galleryId, `/uploads/gallery/${fileName}`]
             );
         });
 
@@ -36,7 +43,7 @@ export default defineEventHandler(async (event) => {
 
         return { statusCode: 200, message: 'Gallery added successfully' };
     } catch (error) {
-        console.error('Error adding activity:', error);
-        return { statusCode: 500, message: 'An error occurred while adding the activity' };
+        console.error('Error adding gallery:', error);
+        return { statusCode: 500, message: 'An error occurred while adding the gallery' };
     }
 });

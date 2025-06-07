@@ -1,63 +1,81 @@
 <template>
-    <div class="container">
-      <h2 class="title pad-bt15">Galeri Masjid</h2>
-      <!-- Loading State -->
-      <div v-if="isLoading" class="loading-spinner">
-        <div class="spinner"></div>
-      </div>
-      <!-- Gallery Grid -->
-      <div v-else class="gallery-grid">
+  <div class="container">
+   <div class="section-header text-center mb-5">
+      <div class="row justify-content-center align-items-center">
         <div
-          v-for="(item, index) in paginatedItems"
-          :key="index"
-          class="gallery-item"
+          class="title-wrapper d-flex align-items-center justify-content-center gap-3 nav-link"
         >
-          <div class="gallery-card">
-            <img :src="item.imgUrl" :alt="item.caption" class="gallery-image" />
-            <div class="gallery-overlay">
-              <h3 class="gallery-caption">{{ item.caption }}</h3>
-              <p class="gallery-date">{{ item.date }}</p>
-              <button
-                class="gallery-btn"
-                @click="viewPhoto(item.id, item.caption)"
-              >
-                Lihat Foto
-              </button>
-            </div>
+          <a class="title mb-0" href="/gallery">GALERI MASJID <i class="bi bi-box-arrow-up-right"></i
+        ></a>
+        </div>
+      </div>
+    </div>
+    <!-- Loading State -->
+    <div v-if="isLoading" class="loading-spinner">
+      <div class="spinner"></div>
+    </div>
+    <!-- Gallery Grid -->
+    <div v-else class="gallery-grid">
+      <div
+        v-for="(item, index) in paginatedItems"
+        :key="index"
+        class="gallery-item fade-in"
+      >
+        <div class="gallery-card">
+          <img :src="item.imgUrl" :alt="item.caption" class="gallery-image" />
+          <div class="gallery-overlay">
+            <h3 class="gallery-caption">{{ item.caption }}</h3>
+            <p class="gallery-date">{{ item.date }}</p>
+            <button
+              class="gallery-btn"
+              @click="viewPhoto(item.id, item.caption)"
+            >
+              Lihat Foto
+            </button>
           </div>
         </div>
       </div>
-
-      <!-- Pagination -->
-      <div class="gallery-pagination">
-        <NuxtLink
-          v-if="currentPage > 1"
-          :to="`/gallery/page/${currentPage - 1}`"
-          class="nav-btn-page"
-        >
-        <i class="bi bi-chevron-left"></i>
-        </NuxtLink>
-        <span class="pagination-current">{{ currentPage }}</span>
-        <NuxtLink
-          v-if="currentPage * itemsPerPage < galleryItems.length"
-          :to="`/gallery/page/${currentPage + 1}`"
-          class="nav-btn-page"
-        >
-        <i class="bi bi-chevron-right"></i>
-        </NuxtLink>
-      </div>
     </div>
+
+    <!-- Updated Pagination -->
+    <div class="gallery-pagination">
+      <button
+        class="nav-btn-page"
+        @click="currentPage--"
+        :disabled="currentPage === 1"
+      >
+        <i class="bi bi-chevron-left"></i>
+      </button>
+      <h3 class="pagination-current">{{ currentPage }}</h3>
+      <button
+        class="nav-btn-page"
+        @click="currentPage++"
+        :disabled="currentPage >= totalPages"
+      >
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { ref, computed } from "vue";
 const route = useRoute();
 
-const galleryItems = ref([]);
+interface GalleryItem {
+  id: number;
+  imgUrl: string;
+  caption: string;
+  date: string;
+  images: string[];
+}
+const galleryItems = ref<GalleryItem[]>([]);
+const currentPage = ref(1);
 const itemsPerPage = 6;
 
-const currentPage = computed(() => {
-  return parseInt(route.params.page) || 1;
-});
+const totalPages = computed(() =>
+  Math.ceil(galleryItems.value.length / itemsPerPage)
+);
 
 const paginatedItems = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage;
@@ -74,11 +92,12 @@ const fetchGalleryItems = async () => {
     const result = await response.json();
 
     if (result.statusCode === 200 && Array.isArray(result.data)) {
-      galleryItems.value = result.data.map(item => ({
+      galleryItems.value = result.data.map((item) => ({
         id: item.id,
-        imgUrl: `data:image/jpeg;base64,${item.images[0]}`,
+        imgUrl: item.images[0],
         caption: item.caption,
         date: formatDate(item.date),
+        images: item.images,
       }));
     } else {
       console.error("Unexpected response format:", result);
@@ -94,10 +113,10 @@ const fetchGalleryItems = async () => {
 const formatUrlString = (str) => {
   return str
     .toLowerCase()
-    .replace(/[']/g, '')
-    .replace(/[^a-z0-9-]/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '');
+    .replace(/[']/g, "")
+    .replace(/[^a-z0-9-]/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
 };
 
 const viewPhoto = (id, caption) => {
@@ -110,12 +129,15 @@ const formatDate = (dateString) => {
   return new Date(dateString).toLocaleDateString("id-ID", options);
 };
 
-watch(() => route.params.page, (newPage) => {
-  const totalPages = Math.ceil(galleryItems.value.length / itemsPerPage);
-  if (currentPage.value < 1 || currentPage.value > totalPages) {
-    navigateTo('/gallery/page/1');
+watch(
+  () => route.params.page,
+  (newPage) => {
+    const totalPages = Math.ceil(galleryItems.value.length / itemsPerPage);
+    if (currentPage.value < 1 || currentPage.value > totalPages) {
+      navigateTo("/gallery/page/1");
+    }
   }
-});
+);
 
 onMounted(fetchGalleryItems);
 </script>

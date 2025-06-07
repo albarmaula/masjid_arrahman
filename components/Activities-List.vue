@@ -8,7 +8,7 @@
       <thead class="thead-light">
         <tr>
           <th>ID</th>
-          <th>Tanggal</th>
+          <th>Bulan</th>
           <th>Agenda</th>
           <th>Flyers</th>
           <th>Aksi</th>
@@ -22,7 +22,7 @@
             <div class="activity">
               <img
                 v-if="activity.agenda"
-                :src="'data:image/jpeg;base64,' + activity.agenda"
+                :src="activity.agenda"
                 class="table-image"
                 alt="Agenda Image"
               />
@@ -33,7 +33,7 @@
               <img
                 v-for="flyer in activity.flyers"
                 :key="flyer.activity_id"
-                :src="'data:image/png;base64,' + flyer.img"
+                :src="flyer.img"
                 alt="Flyer"
                 class="table-image"
               />

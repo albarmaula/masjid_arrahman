@@ -1,7 +1,14 @@
 <template>
   <div class="container text-center">
-    <div class="section-header">
-      <h2 class="title pad-bt15">Infaq Masjid</h2>
+    <div class="section-header text-center mb-5">
+      <div class="row justify-content-center align-items-center">
+        <div
+          class="title-wrapper d-flex align-items-center justify-content-center gap-3 nav-link"
+        >
+          <a class="title mb-0" href="/infaq">INFAQ MASJID <i class="bi bi-box-arrow-up-right"></i
+        ></a>
+        </div>
+      </div>
     </div>
 
     <div class="row align-items-center">

@@ -5,8 +5,11 @@ export default defineEventHandler(async (event) => {
     try {
         const [galleryRows] = await pool.query('SELECT * FROM gallery ORDER BY date DESC');
         const galleryItems = await Promise.all(galleryRows.map(async (gallery) => {
+            // Get image paths from gallery_img table
             const [imgRows] = await pool.query('SELECT img FROM gallery_img WHERE gallery_id = ?', [gallery.id]);
-            const images = imgRows.map(imgRow => imgRow.img.toString('base64'));
+            // No need to convert to base64, just use the stored paths
+            const images = imgRows.map(imgRow => imgRow.img);
+            
             return {
                 id: gallery.id,
                 caption: gallery.caption,

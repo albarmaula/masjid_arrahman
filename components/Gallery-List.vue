@@ -24,7 +24,7 @@
               <img
                 v-for="(image, index) in gallery.images"
                 :key="index"
-                :src="'data:image/jpeg;base64,' + image"
+                :src="image"
                 alt="Gallery Image"
                 class="table-image"
               />
@@ -89,11 +89,18 @@
 import { defineComponent, ref, onMounted } from "vue";
 import { useNuxtApp } from "#app";
 
+interface Gallery {
+  id: number;
+  caption: string;
+  date: string;
+  images: string[]; 
+}
+
 export default defineComponent({
   name: "GalleryList",
   setup() {
     const { $bootstrap } = useNuxtApp();
-    const galleries = ref([]);
+    const galleries = ref<Gallery[]>([]);
     const isLoading = ref(true);
     const messageError = ref("");
     const messageSuccess = ref("");

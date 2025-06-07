@@ -9,7 +9,10 @@
                 <h1 class="bnr-title">Selamat datang di Website</h1>
                 <h2 class="bnr-sub-title">Masjid Oasis Ar-Rahman Surabaya</h2>
                 <div class="overlay-detail">
-                  <a href="#profile">
+                  <a
+                    href="#profile"
+                    @click="handleScrollClick($event, '/#profile')"
+                  >
                     <i class="bi bi-chevron-down"></i>
                   </a>
                 </div>
@@ -23,16 +26,13 @@
     <!-- PROFIL -->
     <div class="section" id="profile">
       <section class="section-padding wow fadeIn delay-05s">
-        <a class="nav-link text-center" href="/profile"
-          ><i class="bi bi-box-arrow-up-right"></i
-        ></a>
         <Profile />
       </section>
     </div>
     <!-- PROFIL -->
     <!-- FITUR -->
-    <div class="section">
-      <section id="features" class="section-padding wow fadeIn delay-05s">
+    <div class="section" id="features">
+      <section class="section-padding wow fadeIn delay-05s">
         <Features />
       </section>
     </div>
@@ -40,36 +40,34 @@
     <!-- KEGIATAN -->
     <div class="section" id="activities">
       <section class="section-padding wow fadeIn delay-05s">
-        <a class="nav-link text-center" href="/activities"
-          ><i class="bi bi-box-arrow-up-right"></i
-        ></a>
         <Activities />
       </section>
     </div>
     <!-- KEGIATAN -->
-    <!-- YOUTUBE -->
+    <!-- YOUTUBE KAJIAN -->
     <div class="section" id="youtube">
       <section class="section-padding wow fadeIn delay-05s">
-        <Youtube />
+        <Youtube-Kajian />
       </section>
     </div>
-    <!-- YOUTUBE -->
+    <!-- YOUTUBE KAJIAN -->
     <!-- INFAQ -->
     <div class="section" id="infaq">
       <section class="section-padding wow fadeIn delay-05s">
-        <a class="nav-link text-center" href="/infaq"
-          ><i class="bi bi-box-arrow-up-right"></i
-        ></a>
         <Infaq />
       </section>
     </div>
     <!-- INFAQ -->
+    <!-- YOUTUBE KEGIATAN -->
+    <div class="section" id="youtube">
+      <section class="section-padding wow fadeIn delay-05s">
+        <Youtube-Kegiatan />
+      </section>
+    </div>
+    <!-- YOUTUBE KEGIATAN -->
     <!-- GALERI -->
     <div class="section" id="gallery">
       <section class="section-padding wow fadeIn delay-05s">
-        <a class="nav-link text-center" href="/gallery"
-          ><i class="bi bi-box-arrow-up-right"></i
-        ></a>
         <Gallery />
       </section>
     </div>
@@ -81,4 +79,43 @@
 definePageMeta({
   title: "Home Page",
 });
+
+const handleScrollClick = (event, path) => {
+  if (path.startsWith("/#")) {
+    event.preventDefault();
+    const targetId = path.substring(2);
+    const element = document.getElementById(targetId);
+
+    if (element) {
+      const headerOffset = 80;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition =
+        elementPosition + window.pageYOffset - headerOffset;
+
+      // Use requestAnimationFrame for smoother animation
+      const startPosition = window.pageYOffset;
+      const distance = offsetPosition - startPosition;
+      const duration = 1000; // 1 second
+      let start = null;
+
+      function animation(currentTime) {
+        if (start === null) start = currentTime;
+        const timeElapsed = currentTime - start;
+        const progress = Math.min(timeElapsed / duration, 1);
+
+        // Easing function for smooth animation
+        const ease = (t) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t);
+
+        window.scrollTo(0, startPosition + distance * ease(progress));
+
+        if (timeElapsed < duration) {
+          requestAnimationFrame(animation);
+        }
+      }
+
+      requestAnimationFrame(animation);
+      closeNavbar();
+    }
+  }
+};
 </script>

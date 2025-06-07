@@ -9,29 +9,29 @@
     </div>
 
     <!-- Tab Navigation -->
-    <ul class="nav nav-tabs justify-content-center mb-3">
-      <li class="nav-tabs-item">
+    <ul class="nav nav-pills justify-content-center mb-4">
+      <li class="nav-item">
         <button
           @click="switchTab('kegiatan')"
-          :class="['nav-tabs-link', activeTab === 'kegiatan' ? 'active' : '']"
+          :class="['nav-link', activeTab === 'kegiatan' ? 'active' : '']"
         >
-          <i class="bi bi-calendar-event"></i> KEGIATAN
+          <i class="bi bi-calendar-event me-2"></i>KEGIATAN
         </button>
       </li>
-      <li class="nav-tabs-item">
+      <li class="nav-item">
         <button
           @click="switchTab('gallery')"
-          :class="['nav-tabs-link', activeTab === 'gallery' ? 'active' : '']"
+          :class="['nav-link', activeTab === 'gallery' ? 'active' : '']"
         >
-          <i class="bi bi-images"></i> GALLERY
+          <i class="bi bi-images me-2"></i>GALLERY
         </button>
       </li>
-      <li class="nav-tabs-item">
+      <li class="nav-item">
         <button
           @click="switchTab('users')"
-          :class="['nav-tabs-link', activeTab === 'users' ? 'active' : '']"
+          :class="['nav-link', activeTab === 'users' ? 'active' : '']"
         >
-          <i class="bi bi-people"></i> USER
+          <i class="bi bi-people me-2"></i>USER
         </button>
       </li>
     </ul>
@@ -106,31 +106,34 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue'
-import { useRoute, useRouter } from '#app'
+import { ref, watch, onMounted } from "vue";
+import { useRoute, useRouter } from "#app";
 
-const route = useRoute()
-const router = useRouter()
-const activeTab = ref('kegiatan')
+const route = useRoute();
+const router = useRouter();
+const activeTab = ref("kegiatan");
 
 onMounted(() => {
-  const tab = route.query.tab || 'kegiatan'
-  activeTab.value = tab
-})
+  const tab = route.query.tab || "kegiatan";
+  activeTab.value = tab;
+});
 
-watch(() => route.query.tab, (newTab) => {
-  activeTab.value = newTab || 'kegiatan'
-})
+watch(
+  () => route.query.tab,
+  (newTab) => {
+    activeTab.value = newTab || "kegiatan";
+  }
+);
 
 const switchTab = (tab) => {
-  router.push({ query: { tab } })
-}
+  router.push({ query: { tab } });
+};
 
 const handleLogout = () => {
-  const token = useCookie("admin_token")
-  const user = useCookie("user")
-  token.value = null
-  user.value = null
-  navigateTo("/login")
-}
+  const token = useCookie("admin_token");
+  const user = useCookie("user");
+  token.value = null;
+  user.value = null;
+  navigateTo("/login");
+};
 </script>

@@ -1,9 +1,12 @@
 import { defineEventHandler, readMultipartFormData } from 'h3';
-import pool from '../db';  // MySQL pool
+import { writeFile } from 'fs/promises';
+import { join } from 'path';
+import pool from '../db';
 
 export default defineEventHandler(async (event) => {
     try {
         const formData = await readMultipartFormData(event);
+        const uploadDir = '/home/masj2582/public_html/uploads/activities';
 
         const agendaFile = formData.find(field => field.name === 'agenda');
         const date = formData.find(field => field.name === 'date')?.data.toString();
@@ -13,23 +16,27 @@ export default defineEventHandler(async (event) => {
             return { statusCode: 400, message: 'Agenda, at least one flyer, and date are required' };
         }
 
-        // Log received data
-        console.log('Received date:', date);
-        console.log('Received agenda file:', agendaFile);
-        console.log('Received flyer files:', flyerFiles);
+        // Save agenda image
+        const agendaFileName = `agenda_${Date.now()}_${agendaFile.filename}`;
+        const agendaPath = join(uploadDir, agendaFileName);
+        await writeFile(agendaPath, agendaFile.data);
 
-        // Insert activity into 'activities' table
+        // Insert activity with image path instead of BLOB
         const [activityResult] = await pool.execute(
             'INSERT INTO activities (agenda, date) VALUES (?, ?)',
-            [agendaFile.data, date] // Store agenda image as BLOB
+            [`/uploads/activities/${agendaFileName}`, date]
         );
         const activityId = (activityResult as any).insertId;
 
-        // Insert multiple flyer images related to the activity
-        const flyerInsertPromises = flyerFiles.map((flyerFile) => {
+        // Save flyer images
+        const flyerInsertPromises = flyerFiles.map(async (flyerFile, index) => {
+            const flyerFileName = `flyer_${activityId}_${index}_${Date.now()}_${flyerFile.filename}`;
+            const flyerPath = join(uploadDir, flyerFileName);
+            await writeFile(flyerPath, flyerFile.data);
+
             return pool.execute(
                 'INSERT INTO activities_flyers (activity_id, img) VALUES (?, ?)',
-                [activityId, flyerFile.data]  // Store flyer image as BLOB
+                [activityId, `/uploads/activities/${flyerFileName}`]
             );
         });
 
