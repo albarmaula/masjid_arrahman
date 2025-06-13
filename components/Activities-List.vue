@@ -132,7 +132,10 @@ export default defineComponent({
 
     onMounted(() => {
       modal.value = new $bootstrap.Modal(
-        document.getElementById("deleteActivityModal")
+        document.getElementById("deleteActivityModal"),
+        {
+          backdrop: false, // Tambahkan ini
+        }
       );
       fetchActivities();
     });

@@ -127,7 +127,10 @@ export default defineComponent({
 
     onMounted(() => {
       modal.value = new $bootstrap.Modal(
-        document.getElementById("deleteGalleryModal")
+        document.getElementById("deleteGalleryModal"),
+        {
+          backdrop: false, // Tambahkan ini
+        }
       );
       fetchGalleries();
     });

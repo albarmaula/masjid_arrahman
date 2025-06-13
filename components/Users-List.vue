@@ -101,7 +101,10 @@ export default defineComponent({
 
     onMounted(() => {
       modal.value = new $bootstrap.Modal(
-        document.getElementById("deleteUserModal")
+        document.getElementById("deleteUserModal"),
+        {
+          backdrop: false,
+        }
       );
       fetchUsers();
     });
