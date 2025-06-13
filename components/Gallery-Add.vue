@@ -45,6 +45,19 @@
           </div>
         </div>
       </div>
+      <button
+        type="submit"
+        class="btn w-100 mb-3"
+        id="btn-submit"
+        :disabled="isLoading"
+      >
+        <span
+          v-if="isLoading"
+          class="spinner-border spinner-border-sm me-2"
+          role="status"
+        ></span>
+        {{ isLoading ? "Mengunggah..." : "Tambah" }}
+      </button>
     </form>
     <!-- Loading overlay -->
     <div v-if="isLoading" class="loading-overlay">
