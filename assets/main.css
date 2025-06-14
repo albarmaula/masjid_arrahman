@@ -723,6 +723,37 @@ Sections
   padding-bottom: 6rem;
 }
 
+.page-numbers {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.page-number {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 4px;
+  cursor: pointer;
+  min-width: 2.5rem;
+  transition: all 0.2s ease;
+}
+
+.page-number.active {
+  background: #1F6533;
+  color: white;
+}
+
+.page-number:hover:not(.active) {
+  background: #1F6533;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.page-ellipsis {
+  padding: 0.5rem 0.25rem;
+}
+
 /***********************************
 Profil
 ***********************************/

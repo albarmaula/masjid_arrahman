@@ -1,12 +1,13 @@
 <template>
   <div class="container">
-   <div class="section-header text-center mb-5">
+    <div class="section-header text-center mb-5">
       <div class="row justify-content-center align-items-center">
         <div
           class="title-wrapper d-flex align-items-center justify-content-center gap-3 nav-link"
         >
-          <a class="title mb-0" href="/gallery">GALERI MASJID <i class="bi bi-box-arrow-up-right"></i
-        ></a>
+          <a class="title mb-0" href="/gallery"
+            >GALERI MASJID <i class="bi bi-box-arrow-up-right"></i
+          ></a>
         </div>
       </div>
     </div>
@@ -41,18 +42,50 @@
     <div class="gallery-pagination">
       <button
         class="nav-btn-page"
+        @click="goToPage(1)"
+        :disabled="currentPage === 1"
+        title="First Page"
+      >
+        <i class="bi bi-chevron-double-left"></i>
+      </button>
+      <button
+        class="nav-btn-page"
         @click="currentPage--"
         :disabled="currentPage === 1"
+        title="Previous Page"
       >
         <i class="bi bi-chevron-left"></i>
       </button>
-      <h3 class="pagination-current">{{ currentPage }}</h3>
+
+      <div class="page-numbers">
+        <template v-for="pageNum in displayedPageNumbers" :key="pageNum">
+          <span v-if="pageNum === '...'" class="page-ellipsis">...</span>
+          <button
+            v-else
+            class="page-number"
+            :class="{ active: currentPage === pageNum }"
+            @click="goToPage(pageNum)"
+          >
+            {{ pageNum }}
+          </button>
+        </template>
+      </div>
+
       <button
         class="nav-btn-page"
         @click="currentPage++"
         :disabled="currentPage >= totalPages"
+        title="Next Page"
       >
         <i class="bi bi-chevron-right"></i>
+      </button>
+      <button
+        class="nav-btn-page"
+        @click="goToPage(totalPages)"
+        :disabled="currentPage >= totalPages"
+        title="Last Page"
+      >
+        <i class="bi bi-chevron-double-right"></i>
       </button>
     </div>
   </div>
@@ -70,8 +103,43 @@ interface GalleryItem {
   images: string[];
 }
 const galleryItems = ref<GalleryItem[]>([]);
-const currentPage = ref(1);
+const currentPage = ref(parseInt(localStorage.getItem("galleryPage") || "1"));
 const itemsPerPage = 6;
+
+const displayedPageNumbers = computed(() => {
+  const delta = 2;
+  const range: (number | string)[] = [];
+  
+  for (let i = 1; i <= totalPages.value; i++) {
+    if (
+      i === 1 || 
+      i === totalPages.value ||
+      (i >= currentPage.value - delta && i <= currentPage.value + delta)
+    ) {
+      range.push(i);
+    } else if (range[range.length - 1] !== '...') {
+      range.push('...');
+    }
+  }
+  
+  return range;
+});
+
+const goToPage = (page: number) => {
+  currentPage.value = page;
+  localStorage.setItem('galleryPage', page.toString());
+};
+
+watch(currentPage, (newPage) => {
+  localStorage.setItem("galleryPage", newPage.toString());
+});
+
+const viewPhoto = (id, caption) => {
+  const urlFriendlyCaption = formatUrlString(caption);
+  // Simpan halaman saat ini sebelum navigasi
+  localStorage.setItem("galleryPage", currentPage.value.toString());
+  navigateTo(`/gallery/${id}/${urlFriendlyCaption}`);
+};
 
 const totalPages = computed(() =>
   Math.ceil(galleryItems.value.length / itemsPerPage)
@@ -117,11 +185,6 @@ const formatUrlString = (str) => {
     .replace(/[^a-z0-9-]/g, "-")
     .replace(/-+/g, "-")
     .replace(/^-|-$/g, "");
-};
-
-const viewPhoto = (id, caption) => {
-  const urlFriendlyCaption = formatUrlString(caption);
-  navigateTo(`/gallery/${id}/${urlFriendlyCaption}`);
 };
 
 const formatDate = (dateString) => {

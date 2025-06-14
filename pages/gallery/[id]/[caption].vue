@@ -11,6 +11,8 @@ const router = useRouter();
 
 const closeModal = () => {
   showModal.value = false;
+  // Dapatkan halaman terakhir dari localStorage
+  const lastPage = parseInt(localStorage.getItem('galleryPage') || '1');
   router.back();
 };
 </script>
